@@ -1,0 +1,81 @@
+version: 2
+
+# ── Sources: tells dbt where raw data lives in Snowflake ─────────────────────
+sources:
+  - name: raw
+    database: FINGUARD
+    schema: RAW
+    description: "Raw financial data loaded directly from synthetic data generator"
+    tables:
+      - name: transactions
+        description: "Raw financial transactions — 50k rows, 5 fraud patterns"
+        columns:
+          - name: transaction_id
+            tests: [unique, not_null]
+          - name: user_id
+            tests: [not_null]
+          - name: amount
+            tests: [not_null]
+
+      - name: users
+        description: "Raw user profiles"
+        columns:
+          - name: user_id
+            tests: [unique, not_null]
+          - name: email
+            tests: [not_null]
+
+      - name: merchants
+        description: "Raw merchant data"
+        columns:
+          - name: merchant_id
+            tests: [unique, not_null]
+
+# ── Models: documents and tests our transformed models ───────────────────────
+models:
+  - name: stg_transactions
+    description: "Cleaned and standardized transactions. Adds derived time fields and fraud signal flags."
+    columns:
+      - name: transaction_id
+        tests: [unique, not_null]
+      - name: amount
+        tests: [not_null]
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['completed', 'pending', 'failed']
+      - name: transaction_type
+        tests:
+          - accepted_values:
+              values: ['purchase', 'withdrawal', 'transfer', 'refund', 'payment']
+
+  - name: stg_users
+    description: "Cleaned user profiles with credit tier classification."
+    columns:
+      - name: user_id
+        tests: [unique, not_null]
+      - name: credit_tier
+        tests:
+          - accepted_values:
+              values: ['excellent', 'good', 'fair', 'poor']
+
+  - name: stg_merchants
+    description: "Cleaned merchant data with risk tier and high-risk category flag."
+    columns:
+      - name: merchant_id
+        tests: [unique, not_null]
+      - name: risk_tier
+        tests:
+          - accepted_values:
+              values: ['high', 'medium', 'low']
+
+  - name: fct_transactions
+    description: >
+      Main analytics fact table. Joins transactions with full user and merchant context.
+      Includes composite fraud risk signals and a rule-based risk score.
+      This is the primary table queried by the FinGuard AI agent.
+    columns:
+      - name: transaction_id
+        tests: [unique, not_null]
+      - name: rule_based_risk_score
+        tests: [not_null]

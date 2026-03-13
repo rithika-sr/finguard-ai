@@ -1,0 +1,17 @@
+# Environment variables - NEVER commit this
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+
+# Data files (too large for GitHub)
+data/raw/*.csv
+
+# dbt
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/

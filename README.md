@@ -62,27 +62,37 @@ This "Trust and Transparency" architecture is directly aligned with emerging AI 
 ### 📊 Real-Time Dashboard
 <img width="2704" height="1506" alt="Image" src="https://github.com/user-attachments/assets/934a947d-3600-48c8-a619-0d197860c94d" />
 - 4 KPI cards: total transactions, fraud count, fraud exposure, avg transaction
+
 - Fraud volume over time chart (daily trend)
+
 - Fraud breakdown by merchant category
+
 - Filterable high-risk transaction feed
 
 ### 🔍 Fraud Investigator
 <img width="2700" height="1508" alt="Image" src="https://github.com/user-attachments/assets/e3654c68-398b-40d2-86f1-df069fbc874d" />
 - Enter any transaction ID → AI generates a complete fraud assessment report
+
 - Identifies which of 5 fraud patterns fired: late-night, foreign location, rapid succession, round amounts, high-risk merchant
+
 - Weighted risk score (0.0–1.0) with recommended action: Auto-approve / Manual review / Block
 
 ### 🗄️ Data Lineage & Governance
 <img width="2680" height="1242" alt="Image" src="https://github.com/user-attachments/assets/751ee5cb-7f78-42cf-8ea1-6d610667f947" />
 - 4-layer pipeline visualization: Raw → Staging → Mart → AI Decision
+
 - Complete audit trail for every transaction showing all transformations applied
+
 - dbt lineage graph integration
+
 - 23 automated data quality tests documented
 
 ### 💬 Natural Language Query
 <img width="2700" height="1506" alt="Image" src="https://github.com/user-attachments/assets/5273992c-3457-4efc-a4d4-8198e91ea286" />
 - Ask any question about the financial data in plain English
+
 - Agent writes SQL, executes against Snowflake, interprets results
+
 - Always returns the SQL used for full transparency
 
 ---

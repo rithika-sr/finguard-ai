@@ -71,7 +71,7 @@ This "Trust and Transparency" architecture is directly aligned with emerging AI 
 - Weighted risk score (0.0–1.0) with recommended action: Auto-approve / Manual review / Block
 
 ### 🗄️ Data Lineage & Governance
-
+<img width="2680" height="1242" alt="Image" src="https://github.com/user-attachments/assets/751ee5cb-7f78-42cf-8ea1-6d610667f947" />
 - 4-layer pipeline visualization: Raw → Staging → Mart → AI Decision
 - Complete audit trail for every transaction showing all transformations applied
 - dbt lineage graph integration

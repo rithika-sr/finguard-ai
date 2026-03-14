@@ -25,6 +25,18 @@ def create_query_task(agent: Agent, question: str) -> Task:
         4. If the question involves fraud, include the fraud rate and breakdown
         5. Always include the SQL you used so the analyst can verify it
 
+        CRITICAL — Data conventions you MUST follow:
+        - merchant_category values are always lowercase with underscores. Use EXACTLY:
+          wire_transfer, gambling, crypto_exchange, grocery, restaurant,
+          gas_station, online_retail, travel, entertainment, pharmacy,
+          electronics, clothing, utilities, healthcare, education
+        - transaction_type values: purchase, withdrawal, transfer, refund, payment
+        - status values: completed, pending, failed
+        - device_type values: mobile, web, atm, pos
+        - country codes are 2-letter uppercase: US, CA, GB, NG, RU, CN, BR, DE, FR, AU, MX
+        - is_fraud is a BOOLEAN — use: is_fraud = TRUE (not 'true' or 1)
+        - All string comparisons must use exact lowercase values as listed above
+
         Format your response as:
         - ANSWER: [direct answer to the question]
         - SQL USED: [the query you ran]
@@ -57,6 +69,12 @@ def create_fraud_explanation_task(agent: Agent, transaction_id: str) -> Task:
            - transaction_hour, amount, merchant_category
         3. Analyze which risk signals fired (are TRUE or elevated)
         4. Produce a structured fraud explanation report
+
+        CRITICAL — Data conventions:
+        - merchant_category is always lowercase with underscores (e.g. wire_transfer, not 'Wire Transfer')
+        - is_fraud is BOOLEAN — TRUE means fraudulent
+        - rule_based_risk_score is a float between 0.0 and 1.0
+        - transaction_country and user_home_country are 2-letter uppercase country codes
 
         Format your response EXACTLY as:
 
@@ -104,6 +122,11 @@ def create_lineage_task(agent: Agent, transaction_id: str) -> Task:
         2. Also query FINGUARD.STAGING.STG_TRANSACTIONS for the staging-layer view
         3. Trace the complete data journey for this transaction
 
+        CRITICAL — Data conventions:
+        - merchant_category is always lowercase with underscores (e.g. wire_transfer)
+        - is_fraud is BOOLEAN — use TRUE/FALSE
+        - All string fields are lowercase unless noted otherwise
+
         Format your response EXACTLY as:
 
         ══════════════════════════════════════════
@@ -143,7 +166,7 @@ def create_lineage_task(agent: Agent, transaction_id: str) -> Task:
 
         LAYER 4 — AI AGENT DECISION
         Agent  : FinGuard Fraud Detection Agent (CrewAI)
-        Model  : GPT-4o
+        Model  : GPT-4o-mini
         Input  : rule_based_risk_score + all fraud signal flags from fct_transactions
         Output : Fraud verdict + human-readable explanation
 
